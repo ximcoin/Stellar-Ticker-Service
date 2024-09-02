@@ -15,6 +15,15 @@ This repo is the home for all of the public Go code produced by the [Stellar Dev
 
 This repo contains various tools and services that you can use and deploy, as well as the SDK you can use to develop applications that integrate with the Stellar network.
 
+## Modifications in this fork
+
+This fork updates the `services/ticker` service to work only with a limited set of assets. For that there are functions `filtered-assets`, `filtered-orderbooks`, `filtered-trades`.
+
+* The file `services/ticker/issuers.txt` describes the list of assets that are being tracked.
+* The nginx server of the ticker got equipped with SSL certificates and CORS headers. File: `services/ticker/docker/conf/nginx.conf`
+* The Dockerfile at `services/ticker/docker/Dockerfile-dev` got a certbot
+* The crontab at `services/ticker/docker/conf/crontab.txt` got a new job to update the SSL cert not to expire
+
 ## Package Index
 
 * [Horizon Server](services/horizon): Full-featured API server for Stellar network
