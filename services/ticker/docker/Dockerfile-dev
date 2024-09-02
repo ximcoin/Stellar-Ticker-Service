@@ -1,0 +1,31 @@
+FROM golang:1.19.1 AS build
+# works without vim \ for linux
+RUN apt-get update && apt-get install -y \
+  curl \
+  git \
+  libpq-dev \
+  postgresql \
+  postgresql-client \
+  postgresql-contrib \
+  sudo \
+  supervisor \
+  nginx \
+  cron \
+  certbot
+
+RUN mkdir -p /opt/stellar/bin /opt/stellar/www /opt/stellar/postgresql/data
+WORKDIR /home/stellar
+COPY . .
+
+WORKDIR ./services/ticker/docker/
+RUN cp -r conf /opt/stellar/conf
+RUN crontab /opt/stellar/conf/crontab.txt
+RUN chmod +x start
+WORKDIR /home/stellar/services/ticker
+RUN cp issuers.txt /opt/stellar/conf
+RUN go build -buildvcs=false -o /opt/stellar/bin/ticker .
+
+EXPOSE 5432
+EXPOSE 8000
+
+ENTRYPOINT ["./docker/start"]

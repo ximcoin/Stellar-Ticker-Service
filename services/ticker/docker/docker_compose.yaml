@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  ticker:
+    image: tickerdev:new_issuer
+    ports:
+      - "8000:8000"
+    volumes:
+      - "/opt/stellar/data:/opt/stellar/postgresql"
+      - "/etc/letsencrypt:/etc/letsencrypt"
